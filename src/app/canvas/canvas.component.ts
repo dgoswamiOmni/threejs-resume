@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
@@ -16,6 +16,11 @@ export class CanvasComponent implements AfterViewInit {
 
   @ViewChild('bgCanvas') private canvasRef!: ElementRef;
 
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: Event) {
+    this.moveCamera();
+  }
+
   private camera!: THREE.Camera
   private scene!: THREE.Scene
   private renderer!: THREE.WebGLRenderer
@@ -30,12 +35,14 @@ export class CanvasComponent implements AfterViewInit {
 
   constructor() {
     this.animate = this.animate.bind(this);
+    this.moveCamera = this.moveCamera.bind(this)
 
   }
 
   ngAfterViewInit(): void {
     this.initThree();
     this.animate();
+
   }
 
   private initThree() {
@@ -76,10 +83,10 @@ export class CanvasComponent implements AfterViewInit {
 
     this.ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     this.scene.add(this.ambientLight);
-
-    this.lightHelper = new THREE.PointLightHelper(this.pointLight)
-    this.gridHelper = new THREE.GridHelper(200,50)
-    this.scene.add(this.lightHelper, this.gridHelper)
+    //
+    // this.lightHelper = new THREE.PointLightHelper(this.pointLight)
+    // this.gridHelper = new THREE.GridHelper(200,50)
+    // this.scene.add(this.lightHelper, this.gridHelper)
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
 
@@ -88,7 +95,7 @@ export class CanvasComponent implements AfterViewInit {
 
     // Dev
 
-    const devTexture = new THREE.TextureLoader().load('assets/jeff.png')
+    const devTexture = new THREE.TextureLoader().load('assets/dev.jpg')
 
     this.dev = new THREE.Mesh(
       new THREE.BoxGeometry(3,3,3),
@@ -114,16 +121,7 @@ export class CanvasComponent implements AfterViewInit {
     this.moon.position.z = 30
     this.moon.position.setX(-10)
 
-    document.body.onscroll = () => this.moveCamera();
-
-
-
-
-
-
-
-
-
+    // document.body.onscroll = () => this.moveCamera();
 
 
   }

@@ -21,7 +21,7 @@ main {
   width: 100vw;
   color: white;
   z-index: 99;
-  position: absolute;
+  position: relative;
   width: 100%;
   margin: 0px auto;
   padding: 120px 0px;
